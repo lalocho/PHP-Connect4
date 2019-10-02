@@ -15,28 +15,37 @@
 //uniqid() -> generate identifier based on current time in microsecond
 
 //Need strategy desing pattern to define STRATEGY CLASS
-$url =  dirname(dirname(__FILE__))."/writable/";
-define('Strategy',$_GET['strategy']);
-print_r($_GET);
-
-$stat = array("Smart", "Random"); // 0 -> Smart 1 ->Random
-$game = new Game();
-if($_GET == $stat[0] || $_GET == $stat[1]){
-    $game->respone = true;
-    $game->pid = uniqid();
-}else
-    $game->response = false;
-    $game->reason = "No such strategy";
-
-$board = array(array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
-    array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
-    array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
-    array(0,0,0,0,0,0,0,));
 class Game{
     var $response;
     var $pid;
     var $reason;
+    var $gameBoard;
 }
+
+$url =  dirname(dirname(__FILE__))."/writable/";
+define('Strategy',$_GET['strategy']);
+print_r($_GET);
+
+$strat = array("Smart", "Random"); // 0 -> Smart 1 ->Random
+$currentGame = new Game(); //instance
+
+if($_GET == $strat[0] || $_GET == $strat[1]){
+    $currentGame->response = true;
+    $currentGame->pid = uniqid();
+    $currentGame->gameBoard = $emptyBoard;
+    
+}else
+    $currentGame->response = false;
+    $currentGame->reason = "No such strategy";
+
+$emptyBoard= array(array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
+    array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
+    array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
+    array(0,0,0,0,0,0,0,));
+
+
+
+echo json_encode($currentGame);
 
 
 
