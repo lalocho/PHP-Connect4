@@ -30,14 +30,14 @@ $currentGame = new Game(); //instance
 if(Strategy == "Random" || Strategy == "Smart"){
     $currentGame->response = true;
     $currentGame->pid = uniqid();
-    echo array("response"=> $currentGame->response, "pid"=> $currentGame->pid);
+    echo json_encode( array("response"=> $currentGame->response, "pid"=> $currentGame->pid)));
     $currentGame->gameBoard = $emptyBoard;
 
     
 }else
     $currentGame->response = false;
     $currentGame->reason = "No such strategy";
-echo array("response"=> $currentGame->response, "reason"=> $currentGame->reason);
+echo json_encode(array("response"=> $currentGame->response, "reason"=> $currentGame->reason));
 if($currentGame -> response == true){
     $saved_board = $url.$currentGame->pid."txt";
     $opened_board = fopen($saved_board,"w");
