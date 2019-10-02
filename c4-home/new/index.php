@@ -16,8 +16,19 @@
 
 //Need strategy desing pattern to define STRATEGY CLASS
 $url =  dirname(dirname(__FILE__))."/writable/";
-define('Strategy',$_Get['strategy']);
+define('Strategy',$_GET['strategy']);
 print_r($_GET);
+
+$stat = array("Smart", "Random"); // 0 -> Smart 1 ->Random
+
+if($_GET == $stat[0] || $_GET == $stat[1]){
+    //respone = true
+    //set a pid
+}else
+    //response = false
+    //set a reason why
+
+
 
 
 ?>
