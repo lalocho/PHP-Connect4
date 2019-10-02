@@ -26,7 +26,7 @@ if($_GET == $stat[0] || $_GET == $stat[1]){
     $game->pid = uniqid();
 }else
     $game->response = false;
-    $gane->response = "No such strategy";
+    $game->reason = "No such strategy";
 
 $board = array(array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
     array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
