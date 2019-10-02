@@ -30,7 +30,7 @@ $currentGame = new Game(); //instance
 if(Strategy == "Random" || Strategy == "Smart"){
     $currentGame->response = true;
     $currentGame->pid = uniqid();
-    echo json_encode( array("response"=> $currentGame->response, "pid"=> $currentGame->pid)));
+    echo json_encode( array("response"=> $currentGame->response, "pid"=> $currentGame->pid));
     $currentGame->gameBoard = $emptyBoard;
 
     
