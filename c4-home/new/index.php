@@ -15,4 +15,9 @@
 //uniqid() -> generate identifier based on current time in microsecond
 
 //Need strategy desing pattern to define STRATEGY CLASS
+$url =  dirname(dirname(__FILE__))."/writable/";
+define('Strategy',$_Get['strategy']);
+print_r($_GET);
 
+
+?>
