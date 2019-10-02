@@ -20,14 +20,23 @@ define('Strategy',$_GET['strategy']);
 print_r($_GET);
 
 $stat = array("Smart", "Random"); // 0 -> Smart 1 ->Random
-
+$game = new Game();
 if($_GET == $stat[0] || $_GET == $stat[1]){
-    //respone = true
-    //set a pid
+    $game->respone = true;
+    $game->pid = uniqid();
 }else
-    //response = false
-    //set a reason why
+    $game->response = false;
+    $gane->response = "No such strategy";
 
+$board = array(array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
+    array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
+    array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
+    array(0,0,0,0,0,0,0,));
+class Game{
+    var $response;
+    var $pid;
+    var $reason;
+}
 
 
 
