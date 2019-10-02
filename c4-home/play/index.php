@@ -1,22 +1,38 @@
 <?php
+ //class ackmove will be the player
 
-//going to need width
-//height
-//strategy (think it will come from play)
+//class move will be the computer automated move
 
-//Make a move by dropping a disc in the specified column, x, to play
-//   the specified game, p. Example: .../play/?pid=57cdc4815e1e5&move=3.
-//
-//   A normal response will be a JSON string like:
-//
-//     {"response": true,
-//      "ack_move": {
-//        "slot": 3,
-//        "isWin": false,   // winning move?
-//	"isDraw": false,  // draw?
-//	"row": []},       // winning row if isWin is true
-//      "move": {
-//        "slot": 4,
-//        "isWin": false,
-//        "isDraw": false,
-//        "row": []}}
+//need methods isWin and isDraw (implement logic here)
+
+
+class ackmove{ //human user
+    var $slot;
+    var $userWin;
+    var $row; //indices fo winning row. [x1,y1,x2..,xn]
+
+
+}
+//NOTE: no computer move if human has game ending move
+
+class move{ //computer logic
+
+
+}
+
+function isWin(){
+
+    return(false);
+}
+
+function isDraw(){
+    //only draw when board is full and nobody as won
+    return (false);
+}
+
+while(1){
+    //visit the url
+    //if(ackmove::)
+}
+
+?>
