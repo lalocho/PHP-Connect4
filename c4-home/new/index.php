@@ -51,7 +51,7 @@ $emptyBoard= array(array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
 
 
 
-echo json_encode($currentGame);
+echo json_encode(array("response"=> $currentGame->response, "pid"=> $currentGame->pid));
 
 
 
