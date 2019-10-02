@@ -29,7 +29,7 @@ print_r($_GET);
 $strat = array("Smart", "Random"); // 0 -> Smart 1 ->Random
 $currentGame = new Game(); //instance
 
-if(Strategy == $strat[0] || Strategy == $strat[1]){
+if(Strategy == "Random" || Strategy == "Smart"){
     $currentGame->response = true;
     $currentGame->pid = uniqid();
     $currentGame->gameBoard = $emptyBoard;
@@ -50,8 +50,10 @@ $emptyBoard= array(array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
     array(0,0,0,0,0,0,0,));
 
 
-
-echo json_encode(array("response"=> $currentGame->response, "pid"=> $currentGame->pid));
+if($currentGame->response == false){
+    echo json_encode(array("response"=> $currentGame->response, "reason"=> $currentGame->reason));
+}else
+    echo json_encode(array("response"=> $currentGame->response, "pid"=> $currentGame->pid));
 
 
 
