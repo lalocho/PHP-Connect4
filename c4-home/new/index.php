@@ -29,7 +29,7 @@ print_r($_GET);
 $strat = array("Smart", "Random"); // 0 -> Smart 1 ->Random
 $currentGame = new Game(); //instance
 
-if($_GET == $strat[0] || $_GET == $strat[1]){
+if(Strategy == $strat[0] || Strategy == $strat[1]){
     $currentGame->response = true;
     $currentGame->pid = uniqid();
     $currentGame->gameBoard = $emptyBoard;
@@ -37,7 +37,13 @@ if($_GET == $strat[0] || $_GET == $strat[1]){
 }else
     $currentGame->response = false;
     $currentGame->reason = "No such strategy";
-
+if($currentGame -> response == true){
+    $saved_board = $url.$currentGame->pid."txt";
+    $opened_board = fopen($saved_board,"w");
+    $board_string = json_encode(array("pid"=>$currentGame->pid, 'strategy'=> Strategy, 'board'=> $currentGame->gameBoard));
+    fwrite($opened_board,$board_string);
+    fclose($opened_board);
+}
 $emptyBoard= array(array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
     array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
     array(0,0,0,0,0,0,0,),array(0,0,0,0,0,0,0,),
