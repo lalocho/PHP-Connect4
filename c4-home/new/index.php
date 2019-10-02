@@ -22,22 +22,25 @@ class Game{
     var $gameBoard;
 }
 
-$url =  dirname(dirname(__FILE__))."/writable/";
-define('Strategy',$_GET['strategy']);
+$url =  dirname(dirname(__FILE__));//."/writable/";
+$strategy = $_GET["strategy"];
 
 $currentGame = new Game(); //instance
+$strategies = array("Smart", "Random");
 
-if(Strategy == "Random" || Strategy == "Smart"){
+
+if(in_array($strategy,$strategies)){
     $currentGame->response = true;
     $currentGame->pid = uniqid();
     echo json_encode( array("response"=> $currentGame->response, "pid"=> $currentGame->pid));
     $currentGame->gameBoard = $emptyBoard;
 
     
-}else
+}else {
     $currentGame->response = false;
     $currentGame->reason = "No such strategy";
-echo json_encode(array("response"=> $currentGame->response, "reason"=> $currentGame->reason));
+    echo json_encode(array("response" => $currentGame->response, "reason" => $currentGame->reason));
+}
 if($currentGame -> response == true){
     $saved_board = $url.$currentGame->pid."txt";
     $opened_board = fopen($saved_board,"w");
