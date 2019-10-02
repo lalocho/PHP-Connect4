@@ -22,7 +22,7 @@ class Game{
     var $gameBoard;
 }
 
-$url =  dirname(dirname(__FILE__));//."/writable/";
+$url =  dirname(dirname(__FILE__))."/writable/";
 $strategy = $_GET["strategy"];
 
 $currentGame = new Game(); //instance
