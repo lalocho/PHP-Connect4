@@ -12,12 +12,30 @@ $return = new ackmove();
 if (!$PID){
     $return->reason = "The PID is not valid";
 
-} else if (!$MOVE || $MOVE > 6){
-    $return -> reason = "The slot is not valid"
+} else if (!$MOVE || $MOVE > 6 || isColumnFull($MOVE)){
+    $return -> reason = "The slot is not valid or full";
 }
 if($return->reason){// if there is a reason output it and exit
     echo json_encode(array("reason"=> $return -> reason));
     exit();
+}
+$file = file_get_contents(url.$PID.".txt");
+$decoded_file = json_decode($file);
+global $game_board;
+$game_board = &$decoded_file->gameboard;
+
+function isColumnFull($column){
+    if(global $game_board[0][$column]){
+        return true;
+    }else {return false;}
+}
+function update_board($input){
+    for( $i = 5; $i >=0;$i--){
+        if (global $game_board[$i][$input]== 0){
+            global $game_board[$i][$input]= 1;
+            exit();
+        }
+    }
 }
 class ackmove{ //human user
     var $slot;
