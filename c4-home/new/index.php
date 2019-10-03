@@ -27,7 +27,7 @@ if(in_array($strategy,$strategies)){ //if Smart or Random
 }
 if($currentGame -> response == true){ //set a new game
     $saved_board = $url.$currentGame->pid."txt";
-    $opened_board = fopen($saved_board,"w");
+    $opened_board = fopen($saved_board,"w");//creates new file
     $board_string = json_encode(array("pid"=>$currentGame->pid, 'strategy'=> Strategy, 'board'=> $currentGame->gameBoard));
     fwrite($opened_board,$board_string);
     fclose($opened_board);
