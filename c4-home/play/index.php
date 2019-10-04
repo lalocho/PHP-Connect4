@@ -7,18 +7,27 @@
 $PID =  $_GET["pid"];
 $MOVE = $_GET["move"];
 $url = dirname(dirname(__FILE__))."/writable/";
-$return = new ackmove();
+$return = new ackmove(); // possibly reason for error?
 
+//REASONS FOR GAME TO EXIT
 if (!$PID){
     $return->reason = "The PID is not valid";
-
-} else if (!$MOVE || $MOVE > 6 || isColumnFull($MOVE)){
-    $return -> reason = "The slot is not valid or full";
-}
-if($return->reason){// if there is a reason output it and exit
-    echo json_encode(array("reason"=> $return -> reason));
+    echo json_encode($return);
+    exit();
+}else if ($MOVE > 6){   //must be in range 0-6
+    $return -> reason = "Must select valid slot.";
+    echo json_encode($return);
+    exit();
+}else if(isColumnFull($MOVE)){  //full column
+    $return -> reason = "Column full, try another slot.";
+    echo json_encode($return);
+    exit();
+}else if(!$MOVE){   //move is null
+    $return -> reason = "Please enter a move.";
+    echo json_encode($return);
     exit();
 }
+
 $file = file_get_contents(url.$PID.".txt");
 $decoded_file = json_decode($file);
 $strategy = &$decoded_file->strategy;
@@ -33,6 +42,7 @@ if($strategy == "Random"){
 $ai_return = new move();
 
 update_board($aimove);
+
 echo json_encode(array("response"=> $response,"ack_move" => array("slot"=> $MOVE,
     "isWin"=> $return->userWin, "isDraw"=> $return->userDraw,
     "row"=> "[]"), "move"=> array("slot"=> $aimove, "isWin"=>$ai_return->isWin,
@@ -63,21 +73,23 @@ function isWin(){
 }
 function isDraw(){
     for($i = 0; $i <=6; $i++){
-        if(isColumnFull($i)){
+        if(isColumnFull($i) && !isWin()){ //added !isWin
             return false;
         }
     }
     return true;
 }
-function isColumnFull($column){
+function isColumnFull($column){ //works
     global $game_board;
     if($game_board[0][$column]){
         return true;
-    }else {return false;}
+    }else{
+        return false;
+    }
 }
 function update_board($input){
     global $game_board;
-    for( $i = 5; $i >=0;$i--){
+    for($i = 5; $i >=0;$i--){
         if ($game_board[$i][$input]== 0){
             $game_board[$i][$input]= 1;
             exit();
@@ -91,7 +103,6 @@ class ackmove{ //human user
     var $reason;
     var $isWin;
     var $userDraw;
-
 }
 //NOTE: no computer move if human has game ending move
 
@@ -100,8 +111,16 @@ class move{ //computer logic
     var $isWin;
     var $slot;
     var $row;
-
 }
-
-
+class gameInfo{
+    public $WIDTH;
+    public $HEIGHT;
+    public $STRATS;
+    function __construct($WIDTH,$HEIGHT,$STRAT)
+    {
+        $this->WIDTH = $WIDTH;
+        $this->HEIGHT = $HEIGHT;
+        $this->STRATS = $STRAT;
+    }
+}
 ?>
