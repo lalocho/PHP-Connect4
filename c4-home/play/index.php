@@ -4,6 +4,7 @@
 
 //http://cssrvlab01.utep.edu/classes/cs3360/leochoa2/c4-home
 //http://cssrvlab01.utep.edu/classes/cs3360/avasquez31/c4-home
+//Last Check: failed 2 tests, smartMove not finished
 
 $PID =  $_GET["pid"];
 $MOVE = $_GET["move"];
@@ -129,7 +130,7 @@ function vertical_win(){
         for ($j = 0; $j <= count($game_board[$i]) - 3; $j++) {
             if ($game_board[$i][$j] != '0' && $game_board[$i][$j] == $game_board[$i+1][$j]
                 && $game_board[$i][$j] == $game_board[$i+2][$j] && $game_board[$i][$j] == $game_board[$i+3][$j]){
-                $win_indices = array($i+1,$j,$i+2, $j, $i+3, $j, $i+4, $j);
+                $win_indices = array($i,$j,$i+1, $j, $i+2, $j, $i+3, $j);
                 return true;
             }
         }
