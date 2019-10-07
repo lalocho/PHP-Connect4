@@ -3,7 +3,6 @@
 //http://cssrvlab01.utep.edu/classes/cs3360/leochoa2/c4-home
 //class move will be the computer automated move
 
-//need methods isWin and isDraw (implement logic here)
 $PID =  $_GET["pid"];
 $MOVE = $_GET["move"];
 global $color;
@@ -37,15 +36,16 @@ if (!$PID){
     echo json_encode($return);
     exit();
 }
+
 $return -> slot = (int)$MOVE;
+
 $file = file_get_contents($url.$PID.".txt");
 $decoded_file = json_decode($file);
 $strategy = &$decoded_file->strategy;
 $game_board = &$decoded_file->board;
 $response = true;
-//echo json_encode(array($strategy));
-//echo json_encode(array($game_board));
-//echo json_encode(array($response));
+
+
 check($return);
 
 if($strategy == "Random"){
@@ -53,18 +53,16 @@ if($strategy == "Random"){
 }else {
     $aimove = smart_move();
 }
+
 $ai_return = new ackmove();
-$ai_return -> slot = $aimove;
-check($ai_return);
-
-
+$ai_return -> slot = $aimove; //set move
+check($ai_return); //update board, check conditions
 
 $saved_board = $url.$PID.".txt";
 $opened_board = fopen($saved_board,"w");//creates new file
 $board_string = json_encode(array("pid"=>$PID, 'strategy'=> $strategy, 'board'=> $game_board));
 fwrite($opened_board,$board_string);
 fclose($opened_board);
-
 
 
 echo json_encode(array("response"=> $response,"ack_move" => array("slot"=> $return->slot,
@@ -76,20 +74,22 @@ function smart_move(){
     $smart_move = rand(0,6);
     return $smart_move;
 }
-function random_move(){
+
+function random_move(){ //assigns random number between 0-6
     $rand_move = rand(0,6);
     while(isColumnFull($rand_move)){
         $rand_move = rand(0,6);
     }
     return $rand_move;
 }
-function check($return)
-{
+
+function check($return){ //update board and check for Win/Draw
     update_board($return->slot);
     $return->userWin = isWin();
     $return->userDraw = isDraw();
 
 }
+
 function horizontal_win(){
     global $game_board;
     global $win_indices;
@@ -104,6 +104,7 @@ function horizontal_win(){
     }
     return false;
 }
+
 function vertical_win(){
     global $game_board;
     global $win_indices;
@@ -118,6 +119,7 @@ function vertical_win(){
     }
     return false;
 }
+
 function diagonal_win(){
     global $game_board;
     for ($i = 0; $i <= count($game_board)-1; $i++) {
@@ -132,24 +134,23 @@ function diagonal_win(){
     return false;
 }
 
-
-
-function isWin(){
-    global $game_board;
+function isWin(){ //check for all possible wins
     if(horizontal_win() or vertical_win() or diagonal_win())
         return true;
     else
         return false;
 }
-function isDraw(){
+
+function isDraw(){ //when board full, and not win
     for($i = 0; $i <=6; $i++){
-        if(!isColumnFull($i)){ //added !isWin
+        if(!isColumnFull($i)){
             return false;
         }
     }
     return true;
 }
-function isColumnFull($column){ //works
+
+function isColumnFull($column){ //return false if column not full
     global $game_board;
     if($game_board[0][$column]){
         return true;
@@ -157,9 +158,10 @@ function isColumnFull($column){ //works
         return false;
     }
 }
+
 function update_board($input){
     global $game_board;
-    global $color;
+    global $color; //assign color to check for possible win
     for($i = 5; $i >=0;$i--){
         if ($game_board[$i][$input]== 0){
             $game_board[$i][$input]= $color;
@@ -171,6 +173,7 @@ function update_board($input){
         $color = 1;
     }
 }
+
 class ackmove{ //human user
     var $slot;
     var $userWin;
@@ -182,16 +185,4 @@ class ackmove{ //human user
 }
 //NOTE: no computer move if human has game ending move
 
-
-class gameInfo{
-    public $WIDTH;
-    public $HEIGHT;
-    public $STRATS;
-    function __construct($WIDTH,$HEIGHT,$STRAT)
-    {
-        $this->WIDTH = $WIDTH;
-        $this->HEIGHT = $HEIGHT;
-        $this->STRATS = $STRAT;
-    }
-}
 ?>
