@@ -5,11 +5,9 @@
 //http://cssrvlab01.utep.edu/classes/cs3360/leochoa2/c4-home
 //http://cssrvlab01.utep.edu/classes/cs3360/avasquez31/c4-home
 
-
-
-
 $PID =  $_GET["pid"];
 $MOVE = $_GET["move"];
+
 global $color;
 global $win_indices;
 global $smart_return; //will place to drop
@@ -17,8 +15,8 @@ global $smart_return; //will place to drop
 $color= 1;
 $win_indices = array();
 $url = dirname(dirname(__FILE__))."/writable/";
-$return = new ackmove(); // possibly reason for error?
 
+$return = new ackmove(); // possibly reason for error?
 
 //REASONS FOR GAME TO EXIT
 if (!$PID){
@@ -26,7 +24,7 @@ if (!$PID){
     $return -> response = false;
     echo json_encode($return);
     exit();
-}else if ($MOVE < 0 or $MOVE > 6){   //must be in range 0-6
+}else if ($MOVE < 0 or $MOVE >=6){   //must be in range 0-6
     $return -> reason = "Must select valid slot.";
     $return -> response = false;
     echo json_encode($return);
@@ -43,7 +41,7 @@ if (!$PID){
     exit();
 }
 
-$return -> slot = (int)$MOVE;
+$return -> slot = (int)$MOVE; //where we drop (if valid)
 
 $file = file_get_contents($url.$PID.".txt");
 $decoded_file = json_decode($file);
@@ -51,16 +49,15 @@ $strategy = &$decoded_file->strategy;
 $game_board = &$decoded_file->board;
 $response = true;
 
+check($return); //check if slot is valid and if it results in win/draw
 
-check($return);
-
-if($strategy == "Random"){
+if($strategy == "Random"){ //set strategy
     $aimove = random_move();
 }else {
     $aimove = smart_move();
 }
 
-$ai_return = new ackmove();
+$ai_return = new ackmove(); //AI instance
 $ai_return -> slot = $aimove; //set move
 check($ai_return); //update board, check conditions
 
@@ -71,8 +68,11 @@ fwrite($opened_board,$board_string);
 fclose($opened_board);
 
 
-echo json_encode(array("response"=> $response,"ack_move" => array("slot"=> $return->slot,
+echo json_encode(array("response"=> $response,
+
+    "ack_move" => array("slot"=> $return->slot,
     "isWin"=> $return->userWin, "isDraw"=> $return->userDraw,
+
     "row"=> array()), "move"=> array("slot"=> $aimove, "isWin"=>$ai_return->userWin,
     "isDraw"=> $ai_return->userDraw, "row"=> $win_indices)));
 
@@ -94,7 +94,7 @@ function smart_move(){
 
 function random_move(){ //assigns random number between 0-6
     $rand_move = rand(0,6);
-    while(isColumnFull($rand_move)){
+    while(isColumnFull($rand_move)){ //if full, choose different number
         $rand_move = rand(0,6);
     }
     return $rand_move;
@@ -190,7 +190,6 @@ function isColumnFull($column){ //return false if column not full
         return false;
     }
 }
-
 function update_board($input){
     global $game_board;
     global $color; //assign color to check for possible win
@@ -205,7 +204,6 @@ function update_board($input){
         $color = 1;
     }
 }
-
 class ackmove{ //human user
     var $slot;
     var $userWin;
@@ -215,6 +213,4 @@ class ackmove{ //human user
     var $userDraw;
     var $response;
 }
-//NOTE: no computer move if human has game ending move
-
 ?>
