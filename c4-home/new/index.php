@@ -1,5 +1,8 @@
 <?php
 
+//ALEX VASQUEZ
+//LUIS OCHOA
+
 class Game{
     var $response; //from jar
     var $pid;

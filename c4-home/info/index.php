@@ -1,12 +1,12 @@
 <?php
+//ALEX VASQUEZ
+//LUIS OCHOA
 
  class Info{
 
     var $width; //board width
     var $height; //board height
     var $strategies; //strategy
-
-     //TODO: figure out logic for strategy
 
     public function _construct($boardWidth, $boardHeight, $gameStrat){
         $this -> width = $boardWidth;
